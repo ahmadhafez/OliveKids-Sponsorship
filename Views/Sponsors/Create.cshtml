@@ -1,0 +1,157 @@
+﻿@model OliveKids.Models.Sponsor
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+
+@using (Html.BeginForm("Create","Sponsors",FormMethod.Post))
+{
+    @Html.HiddenFor( m=> m.SponsoredKids)
+    @*DevExtreme addition*@
+    <div id="form">
+        @(Html.DevExtreme().Form<OliveKids.Models.Sponsor>()
+            .ID("form")
+            .Items(items =>
+            {
+                items.AddGroup()
+                    .CssClass("first-group")
+                    .ColCount(4)
+                    .Items(groupItems =>
+                    {
+                        groupItems.AddSimple().Template("<div class='form-avatar'></div>");
+                        groupItems.AddGroup().ColSpan(3).Items(secondGroupItems =>
+                        {
+                            secondGroupItems.AddSimpleFor(m => m.Name);
+                            secondGroupItems.AddSimpleFor(m => m.Email);
+                            secondGroupItems.AddSimpleFor(m => m.Mobile);
+                        });
+                    });
+
+
+                items.AddGroup()
+                    .CssClass("second-group")
+                    .ColCount(2)
+                    .Items(groupItems =>
+                    {
+                        groupItems.AddGroup().Items(secondGroupItems =>
+                        {
+                            secondGroupItems.AddSimpleFor(m => m.Language)
+                                .Editor(e => e
+                                    .SelectBox()
+                                    .DataSource(new string[] {
+                                            "English",
+                                            "Arabic"
+                                        }
+                                    )
+                                    .Value("")
+                                );
+                        }); ;
+
+                        groupItems.AddGroup().Items(secondGroupItems =>
+                        {
+                            secondGroupItems.AddSimpleFor(m => m.CommunicationPrefrence)
+                                .Editor(e => e
+                                    .SelectBox()
+                                    .DataSource(new string[] {
+                                            "Email", "SMS", "Call after hours", "Call anytime"
+                                        }
+                                    )
+                                );
+
+                        });
+                        groupItems.AddGroup().Items(secondGroupItems =>
+                        {
+                            secondGroupItems.AddSimpleFor(m => m.PaymentMethod)
+                                .Editor(e => e
+                                    .SelectBox()
+                                    .DataSource(new string[] {
+                                            "Credit Card",
+                                            "Debit Card",
+                                            "Paypal"
+                                        }
+                                    )
+                                    .Value("")
+                                );
+                        });
+                        groupItems.AddSimpleFor(m => m.Receipt);
+                        groupItems.AddSimpleFor(m => m.Notes)
+                            .ColSpan(2)
+                            .Editor(e => e
+                                .TextArea()
+                                .Height(140)
+                            );
+                    });
+            })
+            .FormData(Model)
+
+        )
+    </div>
+    <br/>
+       <div class="dx-datagrid">
+        @(Html.DevExtreme().DataGrid<OliveKids.Models.Kid>()
+    .DataSource(d => d.Mvc().Controller("Kids").LoadAction("Get"))
+    .Selection(s => s.Mode(SelectionMode.Multiple))
+    .HoverStateEnabled(true)
+    .ShowBorders(true)
+    .Paging (p => p.PageSize(10))
+    .FilterRow( f => f.Visible(true))
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.Name)
+            .Width(70);
+
+        columns.AddFor(m => m.DateOfBirth);
+
+        columns.AddFor(m => m.Description);
+    })
+    .OnSelectionChanged("selection_changed")
+    
+        )
+    </div>
+
+     <div class="dx-fieldset">
+        @(Html.DevExtreme().ValidationSummary()
+            .ID("summary")
+        )
+
+        @(Html.DevExtreme().Button()
+            .ID("button")
+            .Text("Register")
+            .Type(ButtonType.Success)
+            .UseSubmitBehavior(true)
+        )
+    </div>
+}
+
+<div id="employeeInfo">
+    <img class="employeePhoto" />
+    <p class="employeeNotes"></p>
+</div>
+
+
+<script>
+    function getFormInstance() {
+        return $("#form").dxForm("instance");
+    }
+
+    function selection_changed(selectedItems) {
+        var data = selectedItems.selectedRowsData[0];
+        if(data) {
+            $(".employeeNotes").text(data.Description);
+            var path = "../kids/" + data.Id + ".jpg";
+            $(".employeePhoto").attr("src", path);
+        }
+
+        var newData;
+        for (var i = 0; i < selectedItems.selectedRowsData.length; i++) {
+            newData = selectedItems.selectedRowsData[i].Id + ",";
+        }
+        $('#SponsoredKids').val(newData);
+    }
+</script>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+   

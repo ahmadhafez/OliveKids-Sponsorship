@@ -1,0 +1,131 @@
+﻿@model OliveKids.Models.Kid
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@*<hr />
+@using (Html.BeginForm("FileSelection", "Kids", FormMethod.Post))
+{
+    <div id="form">*@
+<form id="formq" method="post" enctype="multipart/form-data" asp-controller="Kids" asp-action="FileSelection">
+    <div id="ff">
+    @Html.HiddenFor(m => m.Photo)
+        @(Html.DevExtreme().Form<OliveKids.Models.Kid>()
+            .ID("form")
+            .Items(items =>
+            {
+                items.AddGroup()
+                    .CssClass("first-group")
+                    .ColCount(4)
+                    .Items(groupItems =>
+                    {
+                        groupItems.AddSimple().Template("<div class='form-avatar'></div>");
+                        groupItems.AddGroup().ColSpan(3).Items(secondGroupItems =>
+                        {
+                            secondGroupItems.AddSimpleFor(m => m.Name);
+                            secondGroupItems.AddSimpleFor(m => m.ArabicName);
+                            secondGroupItems.AddSimpleFor(m => m.DateOfBirth)
+                                .Editor(e => e
+                                    .DateBox()
+                                    .Width("100%")
+                                )
+                                .IsRequired(true);
+                        });
+                    });
+
+
+                items.AddGroup()
+                    .CssClass("second-group")
+                    .ColCount(2)
+                    .Items(groupItems =>
+                    {
+
+                        groupItems.AddSimpleFor(m => m.Description)
+                            .ColSpan(2)
+                            .Editor(e => e
+                                .TextArea()
+                                .Height(140)
+                            );
+                    });
+            })
+            .FormData(Model)
+        )
+    
+     <div id="fileuploader-container">
+        @(Html.DevExtreme().FileUploader()
+            .Name("Photo")
+            .SelectButtonText("Select photo")
+            .LabelText("")
+            .Accept("image/*")
+            .UploadMode(FileUploadMode.UseForm)
+            
+        )
+    </div>
+    <div class="dx-fieldset">
+        @(Html.DevExtreme().ValidationSummary()
+            .ID("summary")
+        )
+
+        @(Html.DevExtreme().Button()
+            .ID("button")
+            .Text("Update")
+            .Type(ButtonType.Success)
+            .UseSubmitBehavior(true)
+        )
+    </div>
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @**@
+
+
+
+    @*
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateOfBirth" class="control-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+
+        </div>
+    *@
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+@*
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+    *@
