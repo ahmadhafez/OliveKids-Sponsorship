@@ -66,7 +66,10 @@ namespace OliveKids.Controllers
             _context.Sponsors.Add(sponsor);
             _context.SaveChanges();
 
-            return View(sponsor);
+            ViewBag.SponsorName = sponsor.Name;
+            ViewBag.Kids = sponsor.SponsoredKids;
+
+            return View("SubmissionResult");
         }
         // GET: Sponsors/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -101,10 +101,11 @@
     .Columns(columns =>
     {
         columns.AddFor(m => m.Name)
+        .AllowResizing(true)
+        .AllowSearch(true)
+        .AllowSorting(true);
+        columns.AddFor(m => m.Age)
             .Width(70);
-
-        columns.AddFor(m => m.DateOfBirth);
-
         columns.AddFor(m => m.Description);
     })
     .OnSelectionChanged("selection_changed")
@@ -138,10 +139,10 @@
     }
 
     function selection_changed(selectedItems) {
-        var data = selectedItems.selectedRowsData[0];
-        if(data) {
+        var data = selectedItems.selectedRowsData[selectedItems.selectedRowsData.length-1];
+        if (data) {
             $(".employeeNotes").text(data.Description);
-            var path = "../kids/" + data.Id + ".jpg";
+            var path = "../kids/" + data.Id + ".png";
             $(".employeePhoto").attr("src", path);
         }
 
@@ -152,6 +153,7 @@
         $('#SponsoredKids').val(newData);
     }
 </script>
+<br/><hr/>
     <div>
         <a asp-action="Index">Back to List</a>
     </div>

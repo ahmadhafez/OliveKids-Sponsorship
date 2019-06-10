@@ -24,9 +24,11 @@ namespace OliveKids.Models
         [MinLength(50)]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
-        
+        public Sponsor Sponsor { get; set; }
         [NotMapped]
         public object Photo { get; set; }
+        [NotMapped]
+        public bool Sponsored { get; set; }
         [NotMapped]
         public int Age
         {

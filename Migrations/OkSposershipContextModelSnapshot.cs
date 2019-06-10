@@ -34,11 +34,11 @@ namespace OliveKids.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("SponsorId");
+                    b.Property<int?>("sponsorId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SponsorId");
+                    b.HasIndex("sponsorId");
 
                     b.ToTable("Kid");
                 });
@@ -79,9 +79,9 @@ namespace OliveKids.Migrations
 
             modelBuilder.Entity("OliveKids.Models.Kid", b =>
                 {
-                    b.HasOne("OliveKids.Models.Sponsor")
+                    b.HasOne("OliveKids.Models.Sponsor", "sponsor")
                         .WithMany("SponsoredKids")
-                        .HasForeignKey("SponsorId");
+                        .HasForeignKey("sponsorId");
                 });
 #pragma warning restore 612, 618
         }

@@ -29,12 +29,15 @@ namespace OliveKids.Controllers
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var kids = _context.Kids.Select(i => new {
-                i.Id,
-                i.Name,
-                i.DateOfBirth,
-                i.Description
-            });
+            var kids = _context.Kids
+                .Where(p => p.Sponsor == null)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Age,
+                    i.Description
+                });
             return Json(DataSourceLoader.Load(kids, loadOptions));
         }
 
@@ -166,34 +169,42 @@ namespace OliveKids.Controllers
         }
 
         [HttpPost]
-        public ActionResult FileSelection(string name, string arabicName,DateTime dateOfBirth,string description,  IFormFile photo)
+        public ActionResult FileSelection(string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
         {
-            // Learn to use the entire functionality of the dxFileUploader widget.
-            // http://js.devexpress.com/Documentation/Guide/UI_Widgets/UI_Widgets_-_Deep_Dive/dxFileUploader/
-
-            //ViewBag.FirstName = firstName;
-            //ViewBag.LastName = lastName;
-            ViewBag.Photo = "[No photo]";
 
             if (photo != null)
             {
-                SaveFile(photo);
-                ViewBag.Photo = photo.FileName;
+                Kid kid = new Kid()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    ArabicName = arabicName,
+                    DateOfBirth = dateOfBirth,
+                    Description = description
+                };
+
+                SaveFile(photo, kid.Id);
+
+                _context.Kids.Add(kid);
+                _context.SaveChanges();
+                ViewBag.KidName = kid.Name;
+
+                return View("SubmissionSuccessful");
             }
 
-            return View("SubmissionResult");
+            return View("SubmissionFailed");
         }
 
-        void SaveFile(IFormFile file)
+        void SaveFile(IFormFile file, Guid kidGuid)
         {
             try
             {
-                var path = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                // Uncomment to save the file
+                var path = Path.Combine(_hostingEnvironment.WebRootPath, "kids");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                using (var fileStream = System.IO.File.Create(Path.Combine(path, file.FileName)))
+                string photoName = string.Format("{0}.png", kidGuid.ToString());
+                using (var fileStream = System.IO.File.Create(Path.Combine(path, photoName)))
                 {
                     file.CopyTo(fileStream);
                 }
