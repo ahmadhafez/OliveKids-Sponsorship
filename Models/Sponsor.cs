@@ -27,13 +27,16 @@ namespace OliveKids.Models
         [DataType(DataType.PhoneNumber)]
         [Required]
         public string Mobile { get; set; }
+        [DisplayName("Reports Language")]
         public string Language { get; set; }
         [DisplayName("Communication Preference")]
         public string CommunicationPrefrence { get; set; }
         [MaxLength(4000)]
         public string Notes { get; set; }
+        [DisplayName("Payment method")]
         public string PaymentMethod { get; set; }
         public string Receipt { get; set; }
+        public string Address { get; set; }
         [Required]
         public List<Kid> SponsoredKids { get; set; }
     }

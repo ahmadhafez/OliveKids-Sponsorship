@@ -37,6 +37,7 @@ namespace OliveKids.Logic
             string NOTES = nameof(Sponsor.Notes);
             string PAYMENT_METHOD = nameof(Sponsor.PaymentMethod);
             string RECIEPT = nameof(Sponsor.Receipt);
+            string ADDRESS = nameof(Sponsor.Address);
             string SPONSORED_KIDS = nameof(Sponsor.SponsoredKids);
 
             var name = provider.GetValue(NAME).FirstValue;
@@ -47,6 +48,7 @@ namespace OliveKids.Logic
             var notes = provider.GetValue(NOTES).FirstValue;
             var paymentMethod = provider.GetValue(PAYMENT_METHOD).FirstValue;
             var reciept = provider.GetValue(RECIEPT).FirstValue;
+            var address = provider.GetValue(ADDRESS).FirstValue;
 
             var sponsoredKids = provider.GetValue(SPONSORED_KIDS).Values.ToString().Split(',');
             
@@ -72,8 +74,8 @@ namespace OliveKids.Logic
                 Notes = notes,
                 PaymentMethod = paymentMethod,
                 Receipt = reciept,
+                Address =address,
                 SponsoredKids = kids
-
             };
 
 

@@ -23,28 +23,30 @@
                         groupItems.AddSimple().Template("<div class='form-avatar'></div>");
                         groupItems.AddGroup().ColSpan(3).Items(secondGroupItems =>
                         {
-                            secondGroupItems.AddSimpleFor(m => m.Name);
-                            secondGroupItems.AddSimpleFor(m => m.Email);
-                            secondGroupItems.AddSimpleFor(m => m.Mobile);
+                            secondGroupItems.AddSimpleFor(m => m.Name).IsRequired(true);
+                            secondGroupItems.AddSimpleFor(m => m.Email).IsRequired(true);
+                            secondGroupItems.AddSimpleFor(m => m.Mobile).IsRequired(true);
                         });
                     });
 
 
                 items.AddGroup()
                     .CssClass("second-group")
-                    .ColCount(2)
+                    .ColCount(1)
                     .Items(groupItems =>
                     {
                         groupItems.AddGroup().Items(secondGroupItems =>
                         {
                             secondGroupItems.AddSimpleFor(m => m.Language)
+                                .HelpText("Would you like Olive Kids to translate Arabic reports& letter from Al-Amal into English")
                                 .Editor(e => e
                                     .SelectBox()
                                     .DataSource(new string[] {
-                                            "English",
-                                            "Arabic"
+                                            "No thanks, I can read Arabic",
+                                            "Yes please :)"
                                         }
                                     )
+                                    
                                     .Value("")
                                 );
                         }); ;
@@ -55,7 +57,7 @@
                                 .Editor(e => e
                                     .SelectBox()
                                     .DataSource(new string[] {
-                                            "Email", "SMS", "Call after hours", "Call anytime"
+                                            "Email", "Whatsapp","SMS", "Call me"
                                         }
                                     )
                                 );
@@ -64,24 +66,23 @@
                         groupItems.AddGroup().Items(secondGroupItems =>
                         {
                             secondGroupItems.AddSimpleFor(m => m.PaymentMethod)
+                                .HelpText("For first payment")
+                                .ColSpan(2)
                                 .Editor(e => e
                                     .SelectBox()
                                     .DataSource(new string[] {
-                                            "Credit Card",
-                                            "Debit Card",
-                                            "Paypal"
+                                            "Pay by card - $600 Annual",
+                                            "Pay by card - $300 Bi-Annual",
+                                            "Direct debit - Please complete the form"
                                         }
                                     )
                                     .Value("")
                                 );
                         });
                         groupItems.AddSimpleFor(m => m.Receipt);
-                        groupItems.AddSimpleFor(m => m.Notes)
-                            .ColSpan(2)
-                            .Editor(e => e
-                                .TextArea()
-                                .Height(140)
-                            );
+                        groupItems.AddSimpleFor(m => m.Address)
+                        .HelpText(" only used to send letters from your sponsored child");
+                        groupItems.AddSimpleFor(m => m.Notes);
                     });
             })
             .FormData(Model)
