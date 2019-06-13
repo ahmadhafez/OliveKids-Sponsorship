@@ -9,39 +9,71 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+@(Html.DevExtreme().DataGrid<OliveKids.Models.Kid>()
+.ShowBorders(true)
+.DataSource(d => d.Mvc().Controller("Kids").LoadAction("GetAll").Key("Id"))
+.Columns(columns =>
+{
+columns.AddFor(m => m.Name)
+         .CellTemplate(@<text>
+        <div class="img" style="background-image: url(<%=data.Photo%>)" />
+        <span class="name"><%=data.Name%></span>
+            </text>);
+ columns.AddFor(m => m.Age);
+ columns.AddFor(m => m.Sponsored)
+    .AllowFiltering(true)
+    .AllowHeaderFiltering(true)
+    .AllowResizing(true)
+    .AllowSearch(true)
+    .AllowSorting(true)
+    .DataType(GridColumnDataType.Boolean);
+ columns.AddFor(m => m.Description);
+})
+.Paging(p => p.PageSize(10))
+.FilterRow(f => f.Visible(true))
+.HeaderFilter(f => f.Visible(true))
+.GroupPanel(p => p.Visible(true))
+.Grouping(g => g.AutoExpandAll(false))
+.RemoteOperations(true)
+)
+
+
+@*
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+*@

@@ -30,7 +30,7 @@ namespace OliveKids.Controllers
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
             var kids = _context.Kids
-                .Where(p => p.Sponsor == null)
+                .Where(p => p.Sponsored == false)
                 .Select(i => new
                 {
                     i.Id,
@@ -38,6 +38,52 @@ namespace OliveKids.Controllers
                     i.Age,
                     i.Description
                 });
+            return Json(DataSourceLoader.Load(kids, loadOptions));
+        }
+
+        [HttpGet]
+        public IActionResult GetAll(DataSourceLoadOptions loadOptions)
+        {
+            var index = loadOptions.Filter != null ? loadOptions.Filter.IndexOf(nameof(Kid.Sponsored)) : -1;
+            if (index != -1)
+            {
+
+                var flag = Convert.ToBoolean(loadOptions.Filter[index + 2]);
+                var sKids = _context.Kids;
+                if (flag)
+                {
+                    sKids.Where(p => p.Sponsor != null);
+                }
+                else
+                {
+                    sKids.Where(p => p.Sponsor == null);
+                }
+
+
+                // Remove the filter from options
+                for (int i = 0; i < 3; i++)
+                {
+                    loadOptions.Filter.RemoveAt(index);
+                }
+
+                sKids.Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Age,
+                    i.Description
+                });
+                return Json(DataSourceLoader.Load(sKids, loadOptions));
+            }
+            var kids = _context.Kids
+               .Select(i => new
+               {
+                   i.Id,
+                   i.Name,
+                   i.Age,
+                   i.Description
+               });
+
             return Json(DataSourceLoader.Load(kids, loadOptions));
         }
 
@@ -88,6 +134,34 @@ namespace OliveKids.Controllers
             return View(kid);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateKid(string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
+        {
+            if (ModelState.IsValid)
+            {
+                if (photo != null)
+                {
+                    Kid kid = new Kid()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = name,
+                        ArabicName = arabicName,
+                        DateOfBirth = dateOfBirth,
+                        Description = description
+                    };
+
+                    SaveFile(photo, kid.Id);
+
+                    _context.Kids.Add(kid);
+                    _context.SaveChanges();
+                    ViewBag.KidName = kid.Name;
+
+                    return View("SubmissionSuccessful");
+                }
+            }
+            return View("SubmissionFailed");
+        }
         // GET: Kids/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {

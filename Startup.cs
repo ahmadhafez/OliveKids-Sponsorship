@@ -56,6 +56,13 @@ namespace OliveKids
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Make sure that database is created
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<OkSposershipContext>();
+                context.Database.EnsureCreated();
+            }
         }
     }
 }

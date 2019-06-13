@@ -4,11 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-@*<hr />
-@using (Html.BeginForm("FileSelection", "Kids", FormMethod.Post))
-{
-    <div id="form">*@
-<form id="formq" method="post" enctype="multipart/form-data" asp-controller="Kids" asp-action="FileSelection">
+<form id="formq" method="post" enctype="multipart/form-data" asp-controller="Kids" asp-action="CreateKid">
     <div id="ff">
     @Html.HiddenFor(m => m.Photo)
         @(Html.DevExtreme().Form<OliveKids.Models.Kid>()
