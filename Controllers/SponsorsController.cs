@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using OliveKids.Logic;
 using OliveKids.Models;
 using OliveKids.Repository;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace OliveKids.Controllers
 {
@@ -70,6 +69,12 @@ namespace OliveKids.Controllers
             ViewBag.Kids = sponsor.SponsoredKids;
 
             return View("SubmissionResult");
+        }
+
+        private bool SendEmailToSponsor(Sponsor sponsor)
+        {
+
+            return true;
         }
         // GET: Sponsors/Edit/5
         public async Task<IActionResult> Edit(int? id)
