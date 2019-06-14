@@ -9,22 +9,31 @@ using OliveKids.Models;
 using OliveKids.Repository;
 using MailKit.Net.Smtp;
 using MimeKit;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace OliveKids.Controllers
 {
     public class SponsorsController : Controller
     {
         private readonly OkSposershipContext _context;
+        private readonly IHostingEnvironment _env = null;
+        private readonly IConfiguration _configration;
 
-        public SponsorsController(OkSposershipContext context)
+        public SponsorsController(OkSposershipContext context, IHostingEnvironment env, IConfiguration configuration)
         {
             _context = context;
+            _env = env;
+            _configration = configuration;
         }
 
         // GET: Sponsors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sponsors.ToListAsync());
+            var result = await _context.Sponsors.Include
+                (sponsor => sponsor.SponsoredKids).ToListAsync();
+            return View(result);
         }
 
         // GET: Sponsors/Details/5
@@ -53,10 +62,12 @@ namespace OliveKids.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([ModelBinder (binderType: typeof(SponsorModelBinder))] Sponsor sponsor)
+        public IActionResult Create([ModelBinder(binderType: typeof(SponsorModelBinder))] Sponsor sponsor)
         {
+
             List<Kid> kids = new List<Kid>();
-            foreach (var vKid in sponsor.SponsoredKids) {
+            foreach (var vKid in sponsor.SponsoredKids)
+            {
                 var kid = _context.Kids.Find(vKid.Id);
                 kids.Add(kid);
             }
@@ -65,17 +76,86 @@ namespace OliveKids.Controllers
             _context.Sponsors.Add(sponsor);
             _context.SaveChanges();
 
+            bool isEmailSent = SendEmailToSponsor(sponsor);
+
             ViewBag.SponsorName = sponsor.Name;
             ViewBag.Kids = sponsor.SponsoredKids;
+            ViewBag.IsEmailSent = isEmailSent;
 
             return View("SubmissionResult");
+
         }
 
         private bool SendEmailToSponsor(Sponsor sponsor)
         {
+            try
+            {
+                var emailConfigrations = _configration.GetSection("Email");
+                var senderName = emailConfigrations.GetSection("SenderName")?.Value;
+                var senderEmail = emailConfigrations.GetSection("SenderEmail")?.Value;
+                var userName = emailConfigrations.GetSection("Username")?.Value;
+                var password = emailConfigrations.GetSection("Password")?.Value;
+                var host = emailConfigrations.GetSection("Host")?.Value;
+                var port = emailConfigrations.GetSection("Port")?.Value;
+                var subject = emailConfigrations.GetSection("Subject")?.Value;
+                var htmlBody = emailConfigrations.GetSection("HtmlBody")?.Value;
+                var textBody = emailConfigrations.GetSection("TextBody")?.Value;
+                var inReplyTo = emailConfigrations.GetSection("InReplyTo")?.Value;
 
+                MimeMessage message = new MimeMessage();
+
+                MailboxAddress from = new MailboxAddress(senderName, senderEmail);
+                message.From.Add(from);
+
+                MailboxAddress to = new MailboxAddress(sponsor.Name, sponsor.Email);
+                message.To.Add(to);
+
+                message.Subject = subject;
+
+                BodyBuilder bodyBuilder = new BodyBuilder();
+                StringBuilder htmlBuilder = new StringBuilder();
+                StringBuilder textBuilder = new StringBuilder();
+                StringBuilder kidsNames = new StringBuilder();
+                int i = 0;
+
+                foreach (Kid kid in sponsor.SponsoredKids)
+                {
+                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Id));
+                    htmlBuilder.Append(string.Format("<p>{0}</p>", kid.Description));
+                    textBuilder.Append(kid.Description);
+                    textBuilder.Append("/n/r");
+                    if (i != 0) { kidsNames.Append(","); }
+                    kidsNames.Append(kid.Name);
+                }
+
+                htmlBody = string.Format(htmlBody, sponsor.Name, kidsNames?.ToString(), htmlBuilder.ToString());
+                textBody = string.Format(textBody, sponsor.Name, kidsNames?.ToString(), textBuilder.ToString());
+
+                bodyBuilder.HtmlBody = htmlBody;
+                bodyBuilder.TextBody = textBody;
+
+
+                message.Body = bodyBuilder.ToMessageBody();
+                message.InReplyTo = inReplyTo;
+
+
+                using (SmtpClient client = new SmtpClient())
+                {
+                    client.Connect(host, Convert.ToInt32(port), true);
+                    client.Authenticate(userName, password);
+                    client.Send(message);
+                    client.Disconnect(true);
+                    client.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("error", e.Message);
+                return false;
+            }
             return true;
         }
+
         // GET: Sponsors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -151,6 +231,15 @@ namespace OliveKids.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sponsor = await _context.Sponsors.FindAsync(id);
+            if (sponsor.SponsoredKids != null)
+            {
+                foreach (var kid in sponsor.SponsoredKids)
+                {
+                    //kid.Sponsor = null;
+                    //_context.Kids.Update(kid);
+                }
+            }
+            
             _context.Sponsors.Remove(sponsor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

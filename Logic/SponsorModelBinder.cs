@@ -24,6 +24,7 @@ namespace OliveKids.Logic
             var result = GetModelFromContext(bindingContext.ValueProvider);
             bindingContext.Model = result;
             bindingContext.Result = ModelBindingResult.Success(result);
+            
             return Task.CompletedTask;
         }
 

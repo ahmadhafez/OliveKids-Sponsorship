@@ -30,7 +30,7 @@ namespace OliveKids.Controllers
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
             var kids = _context.Kids
-                .Where(p => p.Sponsored == false)
+                .Where(p => p.Sponsor == null)
                 .Select(i => new
                 {
                     i.Id,

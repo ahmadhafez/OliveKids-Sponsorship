@@ -23,9 +23,12 @@
                         groupItems.AddSimple().Template("<div class='form-avatar'></div>");
                         groupItems.AddGroup().ColSpan(3).Items(secondGroupItems =>
                         {
-                            secondGroupItems.AddSimpleFor(m => m.Name).IsRequired(true);
-                            secondGroupItems.AddSimpleFor(m => m.Email).IsRequired(true);
-                            secondGroupItems.AddSimpleFor(m => m.Mobile).IsRequired(true);
+                            secondGroupItems.AddSimpleFor(m => m.Name)
+                                .IsRequired(true);
+                            secondGroupItems.AddSimpleFor(m => m.Email)
+                                .IsRequired(true);
+                            secondGroupItems.AddSimpleFor(m => m.Mobile)
+                                .IsRequired(true);
                         });
                     });
 
@@ -38,15 +41,16 @@
                         groupItems.AddGroup().Items(secondGroupItems =>
                         {
                             secondGroupItems.AddSimpleFor(m => m.Language)
+                                .IsRequired(true)
                                 .HelpText("Would you like Olive Kids to translate Arabic reports& letter from Al-Amal into English")
                                 .Editor(e => e
                                     .SelectBox()
+                                    .Items(new string[]{"false","true"})
                                     .DataSource(new string[] {
                                             "No thanks, I can read Arabic",
                                             "Yes please :)"
                                         }
                                     )
-                                    
                                     .Value("")
                                 );
                         }); ;
@@ -54,6 +58,7 @@
                         groupItems.AddGroup().Items(secondGroupItems =>
                         {
                             secondGroupItems.AddSimpleFor(m => m.CommunicationPrefrence)
+                               .IsRequired(true)
                                 .Editor(e => e
                                     .SelectBox()
                                     .DataSource(new string[] {
@@ -68,6 +73,7 @@
                             secondGroupItems.AddSimpleFor(m => m.PaymentMethod)
                                 .HelpText("For first payment")
                                 .ColSpan(2)
+                                .IsRequired(true)
                                 .Editor(e => e
                                     .SelectBox()
                                     .DataSource(new string[] {
@@ -79,7 +85,7 @@
                                     .Value("")
                                 );
                         });
-                        groupItems.AddSimpleFor(m => m.Receipt);
+                        groupItems.AddSimpleFor(m => m.Receipt).IsRequired(true);
                         groupItems.AddSimpleFor(m => m.Address)
                         .HelpText(" only used to send letters from your sponsored child");
                         groupItems.AddSimpleFor(m => m.Notes);

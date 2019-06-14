@@ -12,6 +12,8 @@
 
 @(Html.DevExtreme().DataGrid<OliveKids.Models.Kid>()
 .ShowBorders(true)
+.Export(e => e.Enabled(true).FileName("OliveKids").AllowExportSelectedData(true))
+.Selection(s => s.Mode(SelectionMode.Multiple))
 .DataSource(d => d.Mvc().Controller("Kids").LoadAction("GetAll").Key("Id"))
 .Columns(columns =>
 {
