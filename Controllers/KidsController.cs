@@ -27,6 +27,50 @@ namespace OliveKids.Controllers
         }
 
         [HttpGet]
+        public IActionResult Sponsored(DataSourceLoadOptions loadOptions)
+        {
+            var kids = _context.Kids
+                .Where(p => p.Sponsor != null)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Age,
+                    i.Description
+                });
+            return View("Grid",kids);
+        }
+
+        [HttpGet]
+        public IActionResult Available(DataSourceLoadOptions loadOptions)
+        {
+            var kids = _context.Kids
+                .Where(p => p.Sponsor == null)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Age,
+                    i.Description
+                }).ToListAsync();
+            return View("Grid", kids);
+        }
+
+        [HttpGet]
+        public IActionResult Total(DataSourceLoadOptions loadOptions)
+        {
+            var kids = _context.Kids
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Age,
+                    i.Description
+                });
+            return View("Grid", kids);
+        }
+
+        [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
             var kids = _context.Kids

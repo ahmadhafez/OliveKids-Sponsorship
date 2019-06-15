@@ -1,0 +1,59 @@
+﻿
+
+@{
+    List<OliveKids.Models.Kid> kids = ViewBag.Kids;
+    string names = "";
+    int i = 0;
+    foreach (var kid in kids)
+    {
+        if (i != 0)
+        {
+            names = string.Format("{0} and {1}", names, kid.Name);
+        }
+
+        else
+        {
+            names = kid.Name;
+        }
+        i++;
+    }
+    bool isEmailSent = ViewBag.IsEmailSent;
+}
+
+<h3>Welcome @ViewBag.SponsorName</h3>
+<hr/>
+<p>We’re so glad to have you on board the program and we thank you for supporting Olive Kids in our mission to improve the lives of Palestinian children.</p>
+
+<p>We’ve emailed you all these details, and we look forward to sharing with you updates from Al-Amal and your sponsored children within the next 3 months</p>
+
+<p>Please let us know if you have any questions</p>
+@*
+@if (!isEmailSent)
+{
+    <p>A confirmation email has been sent to @ViewBag.SponsorEmail</p>
+}
+else
+{
+    <p>
+        We couldn't send a confirmation email to @ViewBag.SponsorEmail! If the supported email is incorrect, please communicate with us to update the supported email.
+        If this the supported email is correct, just let our adiminstration know so we fix our emailing system.
+    </p>
+    <p>Thank you for your contribution</p>
+}
+    *@
+<br />
+
+@(Html.DevExtreme().Button()
+    .Text("New Sponsor")
+    .Type(ButtonType.Back)
+    .Icon("back")
+    .OnClick(@<text>
+            function() {
+            window.location = window.location ;
+            }
+    </text>)
+)
+
+<div class="text-center home-img-footer">
+    <img class="img-fluid" src="~/images/olivekids.png" />
+</div>

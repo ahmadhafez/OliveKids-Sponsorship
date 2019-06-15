@@ -121,7 +121,7 @@ namespace OliveKids.Controllers
                 kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>ID</th><th style='padding: 10px'>Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Photo </th></tr>");
                 foreach(Kid kid in sponsor.SponsoredKids)
                 {
-                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Id));
+                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Name));
                     kidHhtmlInfo.Append("<tr>");
                     var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>Attached {0}.png</td>", kid.Id, kid.Name, kid.Age);
                     kidHhtmlInfo.Append(data);

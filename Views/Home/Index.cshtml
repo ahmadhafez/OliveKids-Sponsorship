@@ -5,21 +5,27 @@
     var sponsoredKids = ViewBag.SponsoredKids;
 }
 <h3 class="text-center">Kids Sponsorship</h3>
-<hr/>
+<hr />
 <div class="card-group col-12">
     <div class="container highlights-item card-header col-md-4 text-center card card-margin-right">
-        <div> Sponsored Kids</div>
-        <div class="font-weight-bold">@Model.SponsoredKids</div>
+        <a asp-controller="Kids" asp-action="Sponsored">
+            <div> Sponsored Kids</div>
+            <div class="font-weight-bold">@Model.SponsoredKids</div>
+        </a>
     </div>
     <div class="container card-header highlights-item col-md-4 text-center card card-margin-right">
-        <div> Available Kids</div>
-        <div class="font-weight-bold">@Model.AvailableKids</div>
+        <a asp-controller="Kids" asp-action="Available">
+            <div> Available Kids</div>
+            <div class="font-weight-bold">@Model.AvailableKids</div>
+        </a>
     </div>
     <div class="container card-header highlights-item col-md-4 text-center card">
-        <div> Total Kids</div>
-        <div class="font-weight-bold">@Model.TotalKids</div>
+        <a asp-controller="Kids" asp-action="Total">
+            <div> Total Kids</div>
+            <div class="font-weight-bold">@Model.TotalKids</div>
+        </a>
     </div>
-    </div>
-    <div class="text-center home-img-footer">
-        <img class="img-fluid" src="~/images/olivekids.png" />
-    </div>
+</div>
+<div class="text-center home-img-footer">
+    <img class="img-fluid" src="~/images/olivekids.png" />
+</div>

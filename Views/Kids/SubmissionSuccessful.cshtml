@@ -1,0 +1,12 @@
+﻿<h3>@ViewBag.KidName is now with Olive Kids kids squad</h3>
+
+@(Html.DevExtreme().Button()
+    .Text("Add another kid")
+    .Type(ButtonType.Default)
+    .Icon("refresh")
+    .OnClick(@<text>
+            function() {
+            window.location = "/Create";
+            }
+    </text>)
+)
