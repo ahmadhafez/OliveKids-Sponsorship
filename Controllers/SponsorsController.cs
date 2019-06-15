@@ -78,6 +78,13 @@ namespace OliveKids.Controllers
 
             bool isEmailSent = SendEmailToSponsor(sponsor);
 
+            if (isEmailSent)
+            {
+                sponsor.LastConfirmationEmail = DateTime.Now;
+                _context.Sponsors.Update(sponsor);
+                _context.SaveChangesAsync();
+            }
+
             ViewBag.SponsorName = sponsor.Name;
             ViewBag.Kids = sponsor.SponsoredKids;
             ViewBag.IsEmailSent = isEmailSent;
@@ -110,43 +117,27 @@ namespace OliveKids.Controllers
                 MailboxAddress to = new MailboxAddress(sponsor.Name, sponsor.Email);
                 message.To.Add(to);
 
-                message.Subject = subject;
+                message.Subject = string.Format(subject,sponsor.Name);
 
                 
                 BodyBuilder bodyBuilder = new BodyBuilder();
                 StringBuilder kidHhtmlInfo = new StringBuilder();
-                //StringBuilder textBuilder = new StringBuilder();
-                //StringBuilder kidsNames = new StringBuilder();
-                int i = 0;
-                kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>ID</th><th style='padding: 10px'>Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Photo </th></tr>");
+               
+                kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>Name</th><th style='padding: 10px'>Arabic Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Gender </th></tr>");
                 foreach(Kid kid in sponsor.SponsoredKids)
                 {
-                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Name));
+                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.jpg", kid.Id));
                     kidHhtmlInfo.Append("<tr>");
-                    var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>Attached {0}.png</td>", kid.Id, kid.Name, kid.Age);
+                    var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>{3}</td>", kid.Name, kid.ArabicName, kid.Age, kid.Gender);
                     kidHhtmlInfo.Append(data);
                     kidHhtmlInfo.Append("</tr>");
                 }
                 kidHhtmlInfo.Append("</table>");
-                //foreach (Kid kid in sponsor.SponsoredKids)
-                //{
-                //    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Id));
-                //    htmlBuilder.Append(string.Format("<p>{0}</p>", kid.Description));
-                //    textBuilder.Append(kid.Description);
-                //    textBuilder.Append("/n/r");
-                //    if (i != 0) { kidsNames.Append(","); }
-                //    kidsNames.Append(kid.Name);
-                //}
-
-                //htmlBody = string.Format(htmlBody, sponsor.Name, kidsNames?.ToString(), htmlBuilder.ToString());
-                // textBody = string.Format(textBody, sponsor.Name, kidsNames?.ToString(), textBuilder.ToString());
-
+               
                 htmlBody = string.Format(htmlBody, sponsor.Name, kidHhtmlInfo.ToString(),
                     sponsor.Name, sponsor.Mobile, sponsor.CommunicationPrefrence, sponsor.Language);
                 bodyBuilder.HtmlBody = htmlBody;
-                //bodyBuilder.TextBody = textBody;
-
-
+                
                 message.Body = bodyBuilder.ToMessageBody();
                 message.InReplyTo = inReplyTo;
 

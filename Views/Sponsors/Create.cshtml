@@ -109,9 +109,10 @@
         .AllowResizing(true)
         .AllowSearch(true)
         .AllowSorting(true);
+        columns.AddFor(m => m.ArabicName);
         columns.AddFor(m => m.Age)
             .Width(70);
-        columns.AddFor(m => m.Description);
+        columns.AddFor(m => m.Gender);
     })
     .OnSelectionChanged("selection_changed")
 
@@ -147,7 +148,7 @@
         var data = selectedItems.selectedRowsData[selectedItems.selectedRowsData.length-1];
         if (data) {
             $(".employeeNotes").text(data.Description);
-            var path = "../kids/" + data.Id + ".png";
+            var path = "../kids/" + data.Id + ".jpg";
             $(".employeePhoto").attr("src", path);
         }
 

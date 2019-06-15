@@ -21,8 +21,9 @@ namespace OliveKids.Migrations
 
             modelBuilder.Entity("OliveKids.Models.Kid", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ArabicName");
 
@@ -31,14 +32,17 @@ namespace OliveKids.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(2000);
 
+                    b.Property<string>("Gender")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("sponsorId");
+                    b.Property<int?>("SponsorId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("sponsorId");
+                    b.HasIndex("SponsorId");
 
                     b.ToTable("Kid");
                 });
@@ -70,8 +74,6 @@ namespace OliveKids.Migrations
 
                     b.Property<string>("PaymentMethod");
 
-                    b.Property<string>("Receipt");
-
                     b.HasKey("Id");
 
                     b.ToTable("Sponsor");
@@ -79,9 +81,9 @@ namespace OliveKids.Migrations
 
             modelBuilder.Entity("OliveKids.Models.Kid", b =>
                 {
-                    b.HasOne("OliveKids.Models.Sponsor", "sponsor")
+                    b.HasOne("OliveKids.Models.Sponsor", "Sponsor")
                         .WithMany("SponsoredKids")
-                        .HasForeignKey("sponsorId");
+                        .HasForeignKey("SponsorId");
                 });
 #pragma warning restore 612, 618
         }

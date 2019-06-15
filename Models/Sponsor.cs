@@ -39,6 +39,7 @@ namespace OliveKids.Models
         public string Notes { get; set; }
         [DisplayName("Payment method")]
         public string PaymentMethod { get; set; }
+        public DateTime? LastConfirmationEmail { get; set; }
         
         public string Address { get; set; }
 

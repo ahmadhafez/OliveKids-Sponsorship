@@ -19,7 +19,7 @@ namespace OliveKids.Controllers
         public IActionResult Index()
         {
             var totalKids = _context.Kids.Count();
-            var availableKids = 0;// _context.Kids.Count( p => p.Sponsor == null);
+            var availableKids =  _context.Kids.Count( p => p.Sponsor == null);
             var sposredKids = totalKids - availableKids;
 
             var summary = new Summary()

@@ -68,7 +68,7 @@ namespace OliveKids.Logic
                 Name = name,
                 Email = email,
                 Mobile = mobile,
-                Language = language,
+                Language = GetReportLanguage(language),
                 CommunicationPrefrence = communicationPrefrence,
                 Notes = notes,
                 PaymentMethod = paymentMethod,
@@ -78,6 +78,15 @@ namespace OliveKids.Logic
 
 
             return sponsor;
+        }
+
+        private string GetReportLanguage(string value)
+        {
+            if(value.Contains("English"))
+            {
+                return "English";
+            }
+            return "Arabic";
         }
     }
 }

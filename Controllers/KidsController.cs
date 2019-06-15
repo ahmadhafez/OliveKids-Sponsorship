@@ -35,8 +35,9 @@ namespace OliveKids.Controllers
                 {
                     i.Id,
                     i.Name,
+                    i.ArabicName,
                     i.Age,
-                    i.Description
+                    i.Gender
                 });
             return View("Grid",kids);
         }
@@ -50,8 +51,9 @@ namespace OliveKids.Controllers
                 {
                     i.Id,
                     i.Name,
+                    i.ArabicName,
                     i.Age,
-                    i.Description
+                    i.Gender
                 }).ToListAsync();
             return View("Grid", kids);
         }
@@ -64,8 +66,9 @@ namespace OliveKids.Controllers
                 {
                     i.Id,
                     i.Name,
+                    i.ArabicName,
                     i.Age,
-                    i.Description
+                    i.Gender
                 });
             return View("Grid", kids);
         }
@@ -79,8 +82,9 @@ namespace OliveKids.Controllers
                 {
                     i.Id,
                     i.Name,
+                    i.ArabicName,
                     i.Age,
-                    i.Description
+                    i.Gender
                 });
             return Json(DataSourceLoader.Load(kids, loadOptions));
         }
@@ -320,7 +324,7 @@ namespace OliveKids.Controllers
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                string photoName = string.Format("{0}.png", id.ToString());
+                string photoName = string.Format("{0}.jpg", id.ToString());
                 using (var fileStream = System.IO.File.Create(Path.Combine(path, photoName)))
                 {
                     file.CopyTo(fileStream);

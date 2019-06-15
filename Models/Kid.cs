@@ -25,7 +25,7 @@ namespace OliveKids.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         [Required]
-        public char Gender { get; set; }
+        public string Gender { get; set; }
         public Sponsor Sponsor { get; set; }
         [NotMapped]
         public object Photo { get; set; }
