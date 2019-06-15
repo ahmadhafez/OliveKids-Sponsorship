@@ -48,7 +48,7 @@ namespace OliveKids.Models.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Guid key, string values) {
+        public IActionResult Put(int key, string values) {
             var model = _context.Kids.FirstOrDefault(item => item.Id == key);
             if(model == null)
                 return StatusCode(409, "Kid not found");
@@ -64,7 +64,7 @@ namespace OliveKids.Models.Controllers
         }
 
         [HttpDelete]
-        public void Delete(Guid key) {
+        public void Delete(int key) {
             var model = _context.Kids.FirstOrDefault(item => item.Id == key);
 
             _context.Kids.Remove(model);
@@ -79,7 +79,7 @@ namespace OliveKids.Models.Controllers
             string DESCRIPTION = nameof(Kid.Description);
 
             if(values.Contains(ID)) {
-                model.Id = (System.Guid)Convert.ChangeType(values[ID], typeof(System.Guid));
+                model.Id = (System.Int32)Convert.ChangeType(values[ID], typeof(System.Guid));
             }
 
             if(values.Contains(NAME)) {

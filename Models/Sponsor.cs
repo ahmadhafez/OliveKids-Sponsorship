@@ -14,10 +14,10 @@ namespace OliveKids.Models
     [ModelBinder(BinderType = typeof(SponsorModelBinder))]
     public class Sponsor
     {
-        //public Sponsor()
-        //{
-        //    this.SponsoredKids = new List<Kid>();
-        //}
+        public Sponsor()
+        {
+            this.SponsoredKids = new List<Kid>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -39,7 +39,7 @@ namespace OliveKids.Models
         public string Notes { get; set; }
         [DisplayName("Payment method")]
         public string PaymentMethod { get; set; }
-        public string Receipt { get; set; }
+        
         public string Address { get; set; }
 
         [Required]

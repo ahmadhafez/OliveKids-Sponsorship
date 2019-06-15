@@ -12,7 +12,7 @@ namespace OliveKids.Models
     public class Kid
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [DisplayName("Arabic name")]
@@ -24,6 +24,8 @@ namespace OliveKids.Models
         [MinLength(50)]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+        [Required]
+        public char Gender { get; set; }
         public Sponsor Sponsor { get; set; }
         [NotMapped]
         public object Photo { get; set; }

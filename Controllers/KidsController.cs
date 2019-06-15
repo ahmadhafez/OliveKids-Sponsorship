@@ -138,7 +138,7 @@ namespace OliveKids.Controllers
         }
 
         // GET: Kids/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -170,7 +170,6 @@ namespace OliveKids.Controllers
         {
             if (ModelState.IsValid)
             {
-                kid.Id = Guid.NewGuid();
                 _context.Add(kid);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -180,7 +179,7 @@ namespace OliveKids.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateKid(string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
+        public IActionResult CreateKid(int id, string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
         {
             if (ModelState.IsValid)
             {
@@ -188,7 +187,7 @@ namespace OliveKids.Controllers
                 {
                     Kid kid = new Kid()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = id,
                         Name = name,
                         ArabicName = arabicName,
                         DateOfBirth = dateOfBirth,
@@ -227,7 +226,7 @@ namespace OliveKids.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,DateOfBirth,Description")] Kid kid)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Description")] Kid kid)
         {
             if (id != kid.Id)
             {
@@ -258,7 +257,7 @@ namespace OliveKids.Controllers
         }
 
         // GET: Kids/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -286,34 +285,34 @@ namespace OliveKids.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        public ActionResult FileSelection(string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
-        {
+        //[HttpPost]
+        //public ActionResult FileSelection(string name, string arabicName, DateTime dateOfBirth, string description, IFormFile photo)
+        //{
 
-            if (photo != null)
-            {
-                Kid kid = new Kid()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = name,
-                    ArabicName = arabicName,
-                    DateOfBirth = dateOfBirth,
-                    Description = description
-                };
+        //    if (photo != null)
+        //    {
+        //        Kid kid = new Kid()
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            Name = name,
+        //            ArabicName = arabicName,
+        //            DateOfBirth = dateOfBirth,
+        //            Description = description
+        //        };
 
-                SaveFile(photo, kid.Id);
+        //        SaveFile(photo, kid.Id);
 
-                _context.Kids.Add(kid);
-                _context.SaveChanges();
-                ViewBag.KidName = kid.Name;
+        //        _context.Kids.Add(kid);
+        //        _context.SaveChanges();
+        //        ViewBag.KidName = kid.Name;
 
-                return View("SubmissionSuccessful");
-            }
+        //        return View("SubmissionSuccessful");
+        //    }
 
-            return View("SubmissionFailed");
-        }
+        //    return View("SubmissionFailed");
+        //}
 
-        void SaveFile(IFormFile file, Guid kidGuid)
+        void SaveFile(IFormFile file, int id)
         {
             try
             {
@@ -321,7 +320,7 @@ namespace OliveKids.Controllers
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                string photoName = string.Format("{0}.png", kidGuid.ToString());
+                string photoName = string.Format("{0}.png", id.ToString());
                 using (var fileStream = System.IO.File.Create(Path.Combine(path, photoName)))
                 {
                     file.CopyTo(fileStream);
@@ -332,7 +331,7 @@ namespace OliveKids.Controllers
                 Response.StatusCode = 400;
             }
         }
-        private bool KidExists(Guid id)
+        private bool KidExists(int id)
         {
             return _context.Kids.Any(e => e.Id == id);
         }

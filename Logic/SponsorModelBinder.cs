@@ -37,7 +37,6 @@ namespace OliveKids.Logic
             string COMMUNICATION_PREFRENCE = nameof(Sponsor.CommunicationPrefrence);
             string NOTES = nameof(Sponsor.Notes);
             string PAYMENT_METHOD = nameof(Sponsor.PaymentMethod);
-            string RECIEPT = nameof(Sponsor.Receipt);
             string ADDRESS = nameof(Sponsor.Address);
             string SPONSORED_KIDS = nameof(Sponsor.SponsoredKids);
 
@@ -48,7 +47,6 @@ namespace OliveKids.Logic
             var communicationPrefrence = provider.GetValue(COMMUNICATION_PREFRENCE).FirstValue;
             var notes = provider.GetValue(NOTES).FirstValue;
             var paymentMethod = provider.GetValue(PAYMENT_METHOD).FirstValue;
-            var reciept = provider.GetValue(RECIEPT).FirstValue;
             var address = provider.GetValue(ADDRESS).FirstValue;
 
             var sponsoredKids = provider.GetValue(SPONSORED_KIDS).Values.ToString().Split(',');
@@ -57,10 +55,10 @@ namespace OliveKids.Logic
             List<Kid> kids = new List<Kid>();
             foreach (var id in sponsoredKids)
             {
-                bool isId = Guid.TryParse(id, out Guid guid);
+                bool isId = int.TryParse(id, out int intId);
                 if (isId)
                 {
-                    var kid = new Kid() { Id = guid };
+                    var kid = new Kid() { Id = intId };
                     kids.Add(kid);
                 }
             }
@@ -74,7 +72,6 @@ namespace OliveKids.Logic
                 CommunicationPrefrence = communicationPrefrence,
                 Notes = notes,
                 PaymentMethod = paymentMethod,
-                Receipt = reciept,
                 Address =address,
                 SponsoredKids = kids
             };
