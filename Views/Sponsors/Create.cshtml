@@ -154,7 +154,12 @@
 
         var newData;
         for (var i = 0; i < selectedItems.selectedRowsData.length; i++) {
-            newData = selectedItems.selectedRowsData[i].Id + ",";
+            if (newData === undefined) {
+                newData = selectedItems.selectedRowsData[i].Id + ",";
+            }
+            else {
+                newData += selectedItems.selectedRowsData[i].Id + ",";
+            }
         }
         $('#SponsoredKids').val(newData);
     }

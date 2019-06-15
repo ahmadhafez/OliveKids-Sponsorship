@@ -122,18 +122,22 @@ namespace OliveKids.Controllers
                 
                 BodyBuilder bodyBuilder = new BodyBuilder();
                 StringBuilder kidHhtmlInfo = new StringBuilder();
-               
+                string rootPath = _env.WebRootPath;
                 kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>Name</th><th style='padding: 10px'>Arabic Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Gender </th></tr>");
                 foreach(Kid kid in sponsor.SponsoredKids)
                 {
-                    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.jpg", kid.Id));
                     kidHhtmlInfo.Append("<tr>");
                     var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>{3}</td>", kid.Name, kid.ArabicName, kid.Age, kid.Gender);
                     kidHhtmlInfo.Append(data);
                     kidHhtmlInfo.Append("</tr>");
+                    
+                    string fileName = string.Format(@"{0}\kids\{1}.jpg",rootPath, kid.Id);
+                    bodyBuilder.Attachments.Add(fileName);
                 }
+
                 kidHhtmlInfo.Append("</table>");
                
+
                 htmlBody = string.Format(htmlBody, sponsor.Name, kidHhtmlInfo.ToString(),
                     sponsor.Name, sponsor.Mobile, sponsor.CommunicationPrefrence, sponsor.Language);
                 bodyBuilder.HtmlBody = htmlBody;
