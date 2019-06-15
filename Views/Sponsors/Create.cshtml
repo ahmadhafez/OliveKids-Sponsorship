@@ -118,7 +118,14 @@
 
         )
     </div>
-
+    <div id="acknowledgement"  class ="acknowledgement">
+        <p>Thank you for your sponsorship! Sponsorship is an ongoing commitment that have a direct impact on your child’s quality of life.
+        We understand that things change sometimes, you can cancel your sponsorship with 30 days notice, please just contact us via email, phone or live chat to do this.
+        Olive Kids will attempt to contact you when your sponsorship renewal is due, or if your sponsorship direct debit fails, however if no response is received and sponsorship remains unpaid for more than 3 months, we will end the sponsorship and re-allocate the child to another sponsor.</p>
+        <p>
+            <span><input id ="paymentchecked" type="checkbox"></span><span> Payment made or direct debit form completed</span>
+        </p>
+    </div>
      <div class="dx-fieldset">
         @(Html.DevExtreme().ValidationSummary()
             .ID("summary")
@@ -129,6 +136,7 @@
             .Text("Register")
             .Type(ButtonType.Success)
             .UseSubmitBehavior(true)
+            .Disabled(true)
         )
     </div>
 }
@@ -140,6 +148,18 @@
 
 
 <script>
+    $(document).ready(function () {
+         $('#paymentchecked').change(function() {
+             if (this.checked) {
+                 $('#button').removeClass("dx-state-disabled");
+             }
+             else {
+                  $('#button').addClass("dx-state-disabled");
+             }
+        
+    });
+});
+    
     function getFormInstance() {
         return $("#form").dxForm("instance");
     }
@@ -164,10 +184,7 @@
         $('#SponsoredKids').val(newData);
     }
 </script>
-<br/><hr/>
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+
    @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

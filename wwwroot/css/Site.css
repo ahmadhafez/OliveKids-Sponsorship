@@ -139,3 +139,10 @@ body {
     height: 440px;
     width: 100%;
 }
+
+.acknowledgement
+{
+    font-size: 8px;
+    font-family: Arial;
+    font-weight: bold;
+}
