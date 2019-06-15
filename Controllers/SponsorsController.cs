@@ -99,7 +99,7 @@ namespace OliveKids.Controllers
                 var port = emailConfigrations.GetSection("Port")?.Value;
                 var subject = emailConfigrations.GetSection("Subject")?.Value;
                 var htmlBody = emailConfigrations.GetSection("HtmlBody")?.Value;
-                var textBody = emailConfigrations.GetSection("TextBody")?.Value;
+               // var textBody = emailConfigrations.GetSection("TextBody")?.Value;
                 var inReplyTo = emailConfigrations.GetSection("InReplyTo")?.Value;
 
                 MimeMessage message = new MimeMessage();
@@ -112,27 +112,39 @@ namespace OliveKids.Controllers
 
                 message.Subject = subject;
 
+                
                 BodyBuilder bodyBuilder = new BodyBuilder();
-                StringBuilder htmlBuilder = new StringBuilder();
-                StringBuilder textBuilder = new StringBuilder();
-                StringBuilder kidsNames = new StringBuilder();
+                StringBuilder kidHhtmlInfo = new StringBuilder();
+                //StringBuilder textBuilder = new StringBuilder();
+                //StringBuilder kidsNames = new StringBuilder();
                 int i = 0;
-
-                foreach (Kid kid in sponsor.SponsoredKids)
+                kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>ID</th><th style='padding: 10px'>Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Photo </th></tr>");
+                foreach(Kid kid in sponsor.SponsoredKids)
                 {
                     bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Id));
-                    htmlBuilder.Append(string.Format("<p>{0}</p>", kid.Description));
-                    textBuilder.Append(kid.Description);
-                    textBuilder.Append("/n/r");
-                    if (i != 0) { kidsNames.Append(","); }
-                    kidsNames.Append(kid.Name);
+                    kidHhtmlInfo.Append("<tr>");
+                    var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>Attached {0}.png</td>", kid.Id, kid.Name, kid.Age);
+                    kidHhtmlInfo.Append(data);
+                    kidHhtmlInfo.Append("</tr>");
                 }
+                kidHhtmlInfo.Append("</table>");
+                //foreach (Kid kid in sponsor.SponsoredKids)
+                //{
+                //    bodyBuilder.Attachments.Add(_env.WebRootPath + string.Format(@"\kids\{0}.png", kid.Id));
+                //    htmlBuilder.Append(string.Format("<p>{0}</p>", kid.Description));
+                //    textBuilder.Append(kid.Description);
+                //    textBuilder.Append("/n/r");
+                //    if (i != 0) { kidsNames.Append(","); }
+                //    kidsNames.Append(kid.Name);
+                //}
 
-                htmlBody = string.Format(htmlBody, sponsor.Name, kidsNames?.ToString(), htmlBuilder.ToString());
-                textBody = string.Format(textBody, sponsor.Name, kidsNames?.ToString(), textBuilder.ToString());
+                //htmlBody = string.Format(htmlBody, sponsor.Name, kidsNames?.ToString(), htmlBuilder.ToString());
+                // textBody = string.Format(textBody, sponsor.Name, kidsNames?.ToString(), textBuilder.ToString());
 
+                htmlBody = string.Format(htmlBody, sponsor.Name, kidHhtmlInfo.ToString(),
+                    sponsor.Name, sponsor.Mobile, sponsor.CommunicationPrefrence, sponsor.Language);
                 bodyBuilder.HtmlBody = htmlBody;
-                bodyBuilder.TextBody = textBody;
+                //bodyBuilder.TextBody = textBody;
 
 
                 message.Body = bodyBuilder.ToMessageBody();
