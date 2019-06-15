@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    
+
 }
 
 
@@ -42,13 +42,13 @@
                         {
                             secondGroupItems.AddSimpleFor(m => m.Language)
                                 .IsRequired(true)
-                                .HelpText("Would you like Olive Kids to translate Arabic reports& letter from Al-Amal into English")
+                                .HelpText("Would you like Olive Kids to translate Arabic reports & letter from Al-Amal into English?")
                                 .Editor(e => e
                                     .SelectBox()
                                     .Items(new string[]{"false","true"})
                                     .DataSource(new string[] {
                                             "No thanks, I can read Arabic",
-                                            "Yes please :)"
+                                            "Please translate to English"
                                         }
                                     )
                                     .Value("")
@@ -87,7 +87,7 @@
                         });
                         groupItems.AddSimpleFor(m => m.Receipt).IsRequired(true);
                         groupItems.AddSimpleFor(m => m.Address)
-                        .HelpText(" only used to send letters from your sponsored child");
+                        .HelpText(" Only used to send letters from your sponsored child");
                         groupItems.AddSimpleFor(m => m.Notes);
                     });
             })
@@ -115,7 +115,7 @@
         columns.AddFor(m => m.Description);
     })
     .OnSelectionChanged("selection_changed")
-    
+
         )
     </div>
 
