@@ -27,6 +27,8 @@ namespace OliveKids.Models.Controllers
                 i.Id,
                 i.Name,
                 i.DateOfBirth,
+                i.Gender,
+                i.Photo,
                 i.Description
             });
             return Json(DataSourceLoader.Load(kids, loadOptions));

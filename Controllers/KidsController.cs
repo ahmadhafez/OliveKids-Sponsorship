@@ -119,7 +119,8 @@ namespace OliveKids.Controllers
                     i.Id,
                     i.Name,
                     i.Age,
-                    i.Description
+                    i.Gender,
+                    i.Photo
                 });
                 return Json(DataSourceLoader.Load(sKids, loadOptions));
             }
@@ -129,7 +130,9 @@ namespace OliveKids.Controllers
                    i.Id,
                    i.Name,
                    i.Age,
-                   i.Description
+                   i.Description,
+                   i.Gender,
+                   i.Photo
                });
 
             return Json(DataSourceLoader.Load(kids, loadOptions));

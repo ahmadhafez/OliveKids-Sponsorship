@@ -28,9 +28,15 @@ namespace OliveKids.Models
         public string Gender { get; set; }
         public Sponsor Sponsor { get; set; }
         [NotMapped]
-        public object Photo { get; set; }
-        [NotMapped]
         public bool Sponsored { get; set; }
+        [NotMapped]
+        public string Photo
+        {
+            get
+            {
+                return string.Format(@"Kids/{0}.jpg", Id);
+            }
+        }
         [NotMapped]
         public int Age
         {
