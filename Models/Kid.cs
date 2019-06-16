@@ -30,6 +30,14 @@ namespace OliveKids.Models
         [NotMapped]
         public bool Sponsored { get; set; }
         [NotMapped]
+        public string GridPhoto
+        {
+            get
+            {
+                return string.Format(@"{0}.jpg", Id);
+            }
+        }
+        [NotMapped]
         public string Photo
         {
             get
