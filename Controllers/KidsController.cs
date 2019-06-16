@@ -38,7 +38,8 @@ namespace OliveKids.Controllers
                     i.ArabicName,
                     i.Age,
                     i.Gender,
-                    i.GridPhoto
+                    i.GridPhoto,
+                    i.Photo
                 });
             return View("Grid",kids);
         }
@@ -55,7 +56,8 @@ namespace OliveKids.Controllers
                     i.ArabicName,
                     i.Age,
                     i.Gender,
-                    i.GridPhoto
+                    i.GridPhoto,
+                    i.Photo
                 }).ToListAsync();
             return View("Grid", kids);
         }
@@ -71,7 +73,8 @@ namespace OliveKids.Controllers
                     i.ArabicName,
                     i.Age,
                     i.Gender,
-                    i.GridPhoto
+                    i.GridPhoto,
+                    i.Photo
                 });
             return View("Grid", kids);
         }
@@ -88,7 +91,8 @@ namespace OliveKids.Controllers
                     i.ArabicName,
                     i.Age,
                     i.Gender,
-                    i.GridPhoto
+                    i.GridPhoto,
+                    i.Photo
                 });
             return Json(DataSourceLoader.Load(kids, loadOptions));
         }
@@ -125,7 +129,8 @@ namespace OliveKids.Controllers
                     i.Age,
                     i.Gender,
                     i.ArabicName,
-                    i.GridPhoto
+                    i.GridPhoto,
+                    i.Photo
                 });
                 return Json(DataSourceLoader.Load(sKids, loadOptions));
             }
@@ -138,7 +143,8 @@ namespace OliveKids.Controllers
                    i.Description,
                    i.Gender,
                    i.ArabicName,
-                   i.GridPhoto
+                   i.GridPhoto,
+                   i.Photo
                });
 
             return Json(DataSourceLoader.Load(kids, loadOptions));
