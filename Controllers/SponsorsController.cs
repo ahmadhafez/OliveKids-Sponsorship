@@ -106,7 +106,7 @@ namespace OliveKids.Controllers
                 var port = emailConfigrations.GetSection("Port")?.Value;
                 var subject = emailConfigrations.GetSection("Subject")?.Value;
                 var htmlBody = emailConfigrations.GetSection("HtmlBody")?.Value;
-               // var textBody = emailConfigrations.GetSection("TextBody")?.Value;
+                // var textBody = emailConfigrations.GetSection("TextBody")?.Value;
                 var inReplyTo = emailConfigrations.GetSection("InReplyTo")?.Value;
 
                 MimeMessage message = new MimeMessage();
@@ -117,31 +117,37 @@ namespace OliveKids.Controllers
                 MailboxAddress to = new MailboxAddress(sponsor.Name, sponsor.Email);
                 message.To.Add(to);
 
-                message.Subject = string.Format(subject,sponsor.Name);
+                message.Subject = string.Format(subject, sponsor.Name);
 
-                
+
                 BodyBuilder bodyBuilder = new BodyBuilder();
                 StringBuilder kidHhtmlInfo = new StringBuilder();
                 string rootPath = _env.WebRootPath;
                 kidHhtmlInfo.Append("<table border ='1' style=' font-family: Arial; font-size: 11px;'><tr><th style='padding: 10px'>Name</th><th style='padding: 10px'>Arabic Name</th><th style='padding: 10px'>Age</th><th style='padding: 10px'> Gender </th></tr>");
-                foreach(Kid kid in sponsor.SponsoredKids)
+                foreach (Kid kid in sponsor.SponsoredKids)
                 {
                     kidHhtmlInfo.Append("<tr>");
                     var data = string.Format("<td style='padding: 10px'>{0}</td><td style='padding: 10px'>{1}</td><td style='padding: 10px'>{2}</td><td>{3}</td>", kid.Name, kid.ArabicName, kid.Age, kid.Gender);
                     kidHhtmlInfo.Append(data);
                     kidHhtmlInfo.Append("</tr>");
-                    
-                    string fileName = string.Format(@"{0}\kids\{1}.jpg",rootPath, kid.Id);
-                    bodyBuilder.Attachments.Add(fileName);
+
+                    string fileName = string.Format(@"{0}\kids\{1}\{2}.jpg", rootPath, kid.Id, kid.Name);
+                    bool exists = System.IO.File.Exists(fileName);
+                    //string fileName = string.Format(@"{0}\kids\{1}.jpg",rootPath, kid.Id);
+                    if (exists)
+                    {
+                        bodyBuilder.Attachments.Add(fileName);
+                    }
+
                 }
 
                 kidHhtmlInfo.Append("</table>");
-               
+
 
                 htmlBody = string.Format(htmlBody, sponsor.Name, kidHhtmlInfo.ToString(),
                     sponsor.Name, sponsor.Mobile, sponsor.CommunicationPrefrence, sponsor.Language);
                 bodyBuilder.HtmlBody = htmlBody;
-                
+
                 message.Body = bodyBuilder.ToMessageBody();
                 message.InReplyTo = inReplyTo;
 
@@ -246,7 +252,7 @@ namespace OliveKids.Controllers
                     //_context.Kids.Update(kid);
                 }
             }
-            
+
             _context.Sponsors.Remove(sponsor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
